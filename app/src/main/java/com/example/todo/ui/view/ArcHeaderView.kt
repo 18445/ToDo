@@ -64,6 +64,9 @@ class ArcHeaderView constructor(
     //屏幕高度
     private var mScreenHeight = 0
 
+    //外部回调
+    private lateinit var onArcHeightChange : (Int) -> Unit
+
     init {
         val resources: Resources = this.resources
         val dm: DisplayMetrics = resources.displayMetrics
@@ -75,8 +78,8 @@ class ArcHeaderView constructor(
             it.style = Paint.Style.FILL
         }
 
-        mStartColor = Color.parseColor("#FF3A80");
-        mEndColor = Color.parseColor("#FF3745");
+        mStartColor = Color.parseColor("#FF3A80")
+        mEndColor = Color.parseColor("#FF3745")
 
         mStartPointF = PointF(0f,0f)
         mEndPointF = PointF(0f,0f)
@@ -86,10 +89,12 @@ class ArcHeaderView constructor(
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
 
+
         mWidth = w
         mHeight = h
 
         mOldHeight = if(mOldHeight == 0) mHeight else mOldHeight
+        onArcHeightChange(h)
 
         mLinearGradient = LinearGradient(mWidth / 2f, 0f, mWidth / 2f, mHeight.toFloat(), mStartColor, mEndColor, Shader.TileMode.MIRROR)
 
@@ -132,7 +137,6 @@ class ArcHeaderView constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        Log.d("onDrawHeight:",height.toString())
         mPath.reset()
         drawPathRect()
         drawPoints()
@@ -157,9 +161,9 @@ class ArcHeaderView constructor(
             MotionEvent.ACTION_MOVE ->{
                 offset =  event.y - initY
                 currentBottom = (bottom + offset).toInt()
-                if(bottom < mScreenHeight / 2 && isFold){
+                if(bottom <= mScreenHeight / 2 && isFold){
                     layout(left,top,right, (bottom + offset).toInt())
-                }else if(mScreenHeight / 2 < bottom && bottom < mScreenHeight && !isFold){
+                }else if(mScreenHeight / 2 <= bottom && bottom <= mScreenHeight  && !isFold){
                     layout(left,top,right, (bottom + offset).toInt())
                 }
                 offsetMax = max(event.y - initY,offsetMax)
@@ -167,22 +171,30 @@ class ArcHeaderView constructor(
                 initY = event.y
             }
             MotionEvent.ACTION_UP ->{
-                if(offsetMax > 10 && isFold){
-                    offsetMax = 0f
-                    offsetMin = 0f
-                    startUnFold(currentBottom)
-                    Log.d("onDrawHeight: isFold",height.toString())
-                    isFold = false
+                if(isFold){
+                    if(offsetMax > 15){
+                        offsetMax = 0f
+                        offsetMin = 0f
+                        startUnFold(currentBottom)
+                        isFold = false
+                    }else{
+                        offsetMax = 0f
+                        offsetMin = 0f
+                        startFold(currentBottom)
+                    }
                 }
-                if(offsetMin < -10 && !isFold){
-                    offsetMax = 0f
-                    offsetMin = 0f
-//                    layoutParams.height = mOldHeight
-//                    requestLayout()
-                    startFold(currentBottom)
-                    invalidate()
-                    Log.d("onDrawHeight: !isFold",height.toString())
-                    isFold = true
+                if(!isFold){
+                    if(offsetMin < -15){
+                        offsetMax = 0f
+                        offsetMin = 0f
+                        startFold(currentBottom)
+                        invalidate()
+                        isFold = true
+                    }else{
+                        offsetMax = 0f
+                        offsetMin = 0f
+                        startUnFold(currentBottom)
+                    }
                 }
             }
         }
@@ -190,7 +202,7 @@ class ArcHeaderView constructor(
     }
 
     private fun startUnFold(currentHeight : Int){
-        ValueAnimator.ofInt(currentHeight,mScreenHeight - mArcHeight * 2)
+        ValueAnimator.ofInt(currentHeight,mScreenHeight - mArcHeight )
             .also{ valueAnimator ->
                 valueAnimator.duration = 1000
                 valueAnimator.addUpdateListener {
@@ -213,10 +225,16 @@ class ArcHeaderView constructor(
             }.start()
     }
 
+    //外部可以设置颜色变化趋势
     fun setColor(@ColorInt startColor : Int,@ColorInt endColor : Int){
         mStartColor = startColor
         mEndColor = endColor
         mLinearGradient = LinearGradient(mWidth / 2f, 0f, mWidth / 2f, mHeight.toFloat(), mStartColor, mEndColor, Shader.TileMode.MIRROR)
+    }
+
+    //根据改变的高度进行回调操作
+    fun arcHeightChange(ArcHeightChange : (Int) -> Unit ){
+        onArcHeightChange = ArcHeightChange
     }
 
 }

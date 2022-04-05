@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="btnAlphaTop"
+            type="Float" />
+        <variable
+            name="btnAlphaBottom"
+            type="Float" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,6 +18,7 @@
         tools:context=".ui.activity.CoopenActivity">
 
         <com.example.todo.ui.view.ArcHeaderView
+            android:id="@+id/ahv_top"
             android:layout_width="match_parent"
             android:layout_height="250dp"
             app:layout_constraintBottom_toTopOf="@+id/logo"
@@ -40,6 +46,42 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.6" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/coopen_mbtn_bottom_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.85" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/coopen_mbtn_top_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbtn_login_top"
+            android:layout_width="211dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="480dp"
+            android:alpha="@{btnAlphaTop}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/coopen_mbtn_top_barrier"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mbtn_login_bottom"
+            android:layout_width="211dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="60dp"
+            android:alpha="@{btnAlphaBottom}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/coopen_mbtn_bottom_barrier"
+            app:layout_constraintVertical_bias="1.0" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

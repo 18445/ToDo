@@ -11,9 +11,11 @@ package com.example.todo.base
  * @Version:        1.0
  * @Description:     //BaseActivity
  */
+import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
@@ -27,6 +29,7 @@ import androidx.core.view.WindowCompat
 abstract class BaseActivity : AppCompatActivity() {
 
     val TAG = javaClass.simpleName
+    var mScreenHeight = 0
 
     /**
      * 初始化数据
@@ -48,6 +51,9 @@ abstract class BaseActivity : AppCompatActivity() {
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
         //去掉系统自带标题栏
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        val resources: Resources = this.resources
+        val dm: DisplayMetrics = resources.displayMetrics
+        mScreenHeight = dm.heightPixels
 
         super.onCreate(savedInstanceState)
         //设置状态栏透明
