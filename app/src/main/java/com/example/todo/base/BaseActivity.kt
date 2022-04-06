@@ -24,6 +24,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import com.example.todo.utils.SHOW_TOAST
+import com.example.todo.utils.toast
+import com.jeremyliao.liveeventbus.LiveEventBus
 
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -45,6 +48,13 @@ abstract class BaseActivity : AppCompatActivity() {
      * 开始请求
      */
     abstract fun startHttp()
+
+    private fun observeUi() {
+        LiveEventBus.get<String>(SHOW_TOAST).observe(this) {
+            toast(it)
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //防止输入法顶起底部布局
@@ -70,6 +80,7 @@ abstract class BaseActivity : AppCompatActivity() {
         //把状态栏颜色设置成透明
         window.statusBarColor = Color.TRANSPARENT
 
+        observeUi()
 
         initData()
         initView()
