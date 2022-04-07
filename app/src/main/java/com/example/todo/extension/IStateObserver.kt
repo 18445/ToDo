@@ -19,7 +19,7 @@ abstract class IStateObserver <T> : Observer<ApiResponse<T>> {
         when (apiResponse) {
             is ApiSuccessResponse -> onSuccess(apiResponse.response)
             is ApiEmptyResponse -> onDataEmpty()
-            is ApiFailedResponse -> onFailed(apiResponse.errorCode, apiResponse.errorMsg)
+            is ApiFailedResponse -> onFailed(apiResponse.code, apiResponse.msg)
             is ApiErrorResponse -> onError(apiResponse.throwable)
         }
         onComplete()

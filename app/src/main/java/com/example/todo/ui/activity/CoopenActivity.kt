@@ -1,20 +1,19 @@
 package com.example.todo.ui.activity
 
 
-import android.opengl.Visibility
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.ViewTreeObserver.OnGlobalLayoutListener
-import androidx.core.view.marginBottom
-import androidx.core.view.marginTop
+import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.todo.R
 import com.example.todo.base.BaseActivity
 import com.example.todo.databinding.ActivityCoopenBinding
+import com.example.todo.ui.activity.login.LoginActivity
 import com.example.todo.ui.viewModel.RegisterViewModel
+import com.example.todo.utils.toast
 import kotlin.math.max
 
 
@@ -46,6 +45,8 @@ class CoopenActivity : BaseActivity() {
     override fun initData() {
         mBtnAlphaBottom.value = 1f
         mBtnAlphaTop.value = 0f
+
+        mRegisterViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
     }
 
     override fun initView() {
@@ -59,13 +60,13 @@ class CoopenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        mRegisterViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+        val coopenBinding : ActivityCoopenBinding = DataBindingUtil.setContentView(this, R.layout.activity_coopen)
 
-        mRegisterViewModel.userInfo.observe(this){
-            
+        coopenBinding.also {
+            it.bottomText = "Continue with Phone"
+            it.topText = "Continue with Password"
         }
 
-        val coopenBinding : ActivityCoopenBinding = DataBindingUtil.setContentView(this, R.layout.activity_coopen)
 
         coopenBinding.logo.also {
             it.fillLogoTextArray("To Do Something")
@@ -86,8 +87,6 @@ class CoopenActivity : BaseActivity() {
 //                  上方ArcView收缩状态 -> 拉伸状态
                     if(mArcHeaderHeight != 0){
                         mBtnAlphaBottom.value = foldAlpha(it)
-//                        mBtnMarginTop.value = (1 - unFoldAlpha(it)) * mOffset
-                        mBtnMarginTop.value = foldTranslation(it)
                     }
 //                  下方ArcView拉伸状态 -> 收缩状态
                     mBtnAlphaTop.value = unFoldAlpha(it)
@@ -99,6 +98,15 @@ class CoopenActivity : BaseActivity() {
         coopenBinding.mbtnLoginBottom.also {
             mBtnAlphaBottom.observe(this){ mAlpha ->
                 coopenBinding.btnAlphaBottom = mAlpha
+                it.isClickable = mAlpha > 0
+            }
+            it.animate().duration = 2000
+            it.animate().interpolator = AccelerateDecelerateInterpolator()
+            it.animate().translationY(-600f).startDelay = 500
+            it.animate().start()
+
+            it.setOnClickListener {
+                startLogin()
             }
         }
 
@@ -107,6 +115,11 @@ class CoopenActivity : BaseActivity() {
             mBtnAlphaTop.observe(this){ mAlpha ->
                 Log.d(TAG,"currentAlpha:$mAlpha")
                 coopenBinding.btnAlphaTop = mAlpha
+                it.isClickable = mAlpha > 0
+            }
+
+            it.setOnClickListener {
+                toast("aaaa")
             }
         }
 
@@ -126,5 +139,10 @@ class CoopenActivity : BaseActivity() {
     //拉伸状态改变alpha通道
     private fun unFoldAlpha(mHeight: Int): Float {
         return (mHeight * 1.25f - mHalfScreenHeight ) / mHalfScreenHeight
+    }
+
+    //开启登录界面
+    private fun startLogin(){
+        startActivity(Intent(this, LoginActivity::class.java))
     }
 }

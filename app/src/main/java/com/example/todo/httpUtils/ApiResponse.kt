@@ -15,19 +15,19 @@ import java.io.*
 
 open class ApiResponse<out T>(
     open val data: T? = null,
-    open val errorCode: Int? = null,
-    open val errorMsg: String? = null,
+    open val code: Int? = null,
+    open val msg: String? = null,
     open val error: Throwable? = null,
 ) : Serializable {
     val isSuccess: Boolean
-        get() = errorCode == 0
+        get() = code == 0 || code == 200
 }
 
 class ApiEmptyResponse<T> : ApiResponse<T>()
 
 data class ApiSuccessResponse<T>(val response: T) : ApiResponse<T>(data = response)
 
-data class ApiFailedResponse<T>(override val errorCode: Int?, override val errorMsg: String?) : ApiResponse<T>(errorCode = errorCode, errorMsg = errorMsg)
+data class ApiFailedResponse<T>(override val code: Int?, override val msg: String?) : ApiResponse<T>(code = code, msg = msg)
 
 data class ApiErrorResponse<T>(val throwable: Throwable) : ApiResponse<T>(error = throwable)
 
@@ -37,4 +37,3 @@ data class UserInfoBody(
     val userId: Int,
     val username: String
 )
-

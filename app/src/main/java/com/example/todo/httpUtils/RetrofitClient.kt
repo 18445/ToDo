@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     //请求的地址
-    const val BASE_URL = "https://mjgopher.asia"
+    const val BASE_URL = "https://wuchenglin.plus"
 
     //retrofit对象
     private var retrofit: Retrofit? = null
@@ -58,7 +58,6 @@ object RetrofitClient {
             .writeTimeout(DEFAULT_WRITE_TIME, TimeUnit.SECONDS)//设置写操作超时时间
             .readTimeout(DEFAULT_READ_TIME, TimeUnit.SECONDS)//设置读操作超时时间
             .addInterceptor(getHttpLoggingInterceptor())
-
 
         return builder.build()
     }

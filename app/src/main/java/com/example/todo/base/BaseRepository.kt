@@ -43,7 +43,7 @@ open class BaseRepository {
             getHttpSuccessResponse(data)
         } else {
 //            handlingApiExceptions(data.errorCode, data.errorMsg)
-            ApiFailedResponse(data.errorCode, data.errorMsg)
+            ApiFailedResponse(data.code, data.msg)
         }
     }
 

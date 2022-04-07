@@ -201,6 +201,8 @@ class ArcHeaderView constructor(
         return super.onTouchEvent(event)
     }
 
+    
+
     private fun startUnFold(currentHeight : Int){
         ValueAnimator.ofInt(currentHeight,mScreenHeight - mArcHeight )
             .also{ valueAnimator ->

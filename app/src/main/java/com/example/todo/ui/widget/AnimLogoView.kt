@@ -84,7 +84,7 @@ class AnimLogoView constructor(
     init {
         //画笔初始化
         mTextPaint.also {
-            it.textSize = 50f
+            it.textSize = 75f
             it.color = Color.rgb(135,206,250)//浅蓝色
             it.isAntiAlias = true
         }

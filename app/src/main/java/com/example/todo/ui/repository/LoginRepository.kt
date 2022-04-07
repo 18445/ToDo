@@ -18,13 +18,13 @@ import com.example.todo.httpUtils.UserInfoBody
  */
 
 
-class RegisterRepository : BaseRepository(){
+class LoginRepository : BaseRepository(){
 
     private val mApiService = RetrofitClient.service
 
     suspend fun sentVerify(phone : String) : ApiResponse<List<UserInfoBody>>{
         return executeHttp {
-            mApiService.login(phone)
+            mApiService.sentVerify(phone)
         }
     }
 

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo.extension.StateLiveData
 import com.example.todo.httpUtils.UserInfoBody
-import com.example.todo.ui.repository.RegisterRepository
+import com.example.todo.ui.repository.LoginRepository
 import kotlinx.coroutines.launch
 
 /**
@@ -23,12 +23,12 @@ class RegisterViewModel : ViewModel(){
     val userInfo = StateLiveData<List<UserInfoBody>>()
 
     private val registerRepository by lazy {
-        RegisterRepository()
+        LoginRepository()
     }
 
-    fun login(phone : String){
+    fun sendVerify(phone : String){
         viewModelScope.launch {
-            userInfo.value = registerRepository.sentVerify(phone)
+            registerRepository.sentVerify(phone)
         }
     }
 

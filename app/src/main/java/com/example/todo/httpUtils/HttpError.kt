@@ -34,6 +34,7 @@ internal fun handlingExceptions(e: Throwable) = when (e) {
     is HttpException -> toast(e.message())
 
     is CancellationException -> {
+
     }
 
     is SocketTimeoutException -> {

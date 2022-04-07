@@ -1,7 +1,6 @@
 package com.example.todo.httpUtils
 
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 /**
  *
@@ -17,10 +16,11 @@ import retrofit2.http.Path
 interface ApiService {
 
     /**
-     * 获取轮播图
+     * 发送验证码
      */
-    @GET("/api/verify/sms/{phoneNumber}")
-    suspend fun login(@Path("phoneNumber") phone : String) : ApiResponse<List<UserInfoBody>>
+    @FormUrlEncoded
+    @POST("/verify/sms/register")
+    suspend fun sentVerify(@Field("phone") phone : String) : ApiResponse<List<UserInfoBody>>
 
 
 

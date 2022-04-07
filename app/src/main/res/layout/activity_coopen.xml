@@ -10,11 +10,18 @@
         <variable
             name="btnAlphaBottom"
             type="Float" />
+        <variable
+            name="bottomText"
+            type="String" />
+        <variable
+            name="topText"
+            type="String" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/coopen_gradient_background"
         tools:context=".ui.activity.CoopenActivity">
 
         <com.example.todo.ui.view.ArcHeaderView
@@ -60,24 +67,34 @@
             app:layout_constraintGuide_percent="0.25" />
 
         <com.google.android.material.button.MaterialButton
+            app:icon="@drawable/ic_continue_password"
             android:id="@+id/mbtn_login_top"
-            android:layout_width="211dp"
+            android:layout_width="250dp"
             android:layout_height="60dp"
             android:alpha="@{btnAlphaTop}"
+            android:text="@{topText}"
+            android:background="@drawable/button_gradient_background"
+            app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="@+id/ahv_top"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/coopen_mbtn_top_barrier"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.material.button.MaterialButton
+            app:icon="@drawable/ic_continue_phone"
             android:id="@+id/mbtn_login_bottom"
-            android:layout_width="211dp"
+            android:layout_width="250dp"
             android:layout_height="60dp"
             android:alpha="@{btnAlphaBottom}"
+            android:text="@{bottomText}"
+            android:background="@drawable/button_gradient_background"
+            app:backgroundTint="@null"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/coopen_mbtn_bottom_barrier" />
+            app:layout_constraintTop_toBottomOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
