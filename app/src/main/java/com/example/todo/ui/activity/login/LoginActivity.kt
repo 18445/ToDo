@@ -73,6 +73,7 @@ class LoginActivity : BaseActivity(){
             }
         }
 
+
         activityLoginBinding.viewPager2.also{
 
             it.adapter = object : FragmentStateAdapter(supportFragmentManager,lifecycle) {
