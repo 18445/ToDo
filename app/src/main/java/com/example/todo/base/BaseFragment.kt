@@ -31,11 +31,6 @@ abstract class BaseFragment : Fragment() {
     val pageSize = 20
 
     /**
-     * 布局文件id
-     */
-    abstract fun getLayoutId(): Int
-
-    /**
      * 初始化数据
      */
     abstract fun initData()

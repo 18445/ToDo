@@ -1,9 +1,7 @@
 package com.example.todo.ui.repository
 
 import com.example.todo.base.BaseRepository
-import com.example.todo.httpUtils.ApiResponse
-import com.example.todo.httpUtils.RetrofitClient
-import com.example.todo.httpUtils.UserInfoBody
+import com.example.todo.httpUtils.*
 
 /**
  *
@@ -22,9 +20,15 @@ class LoginRepository : BaseRepository(){
 
     private val mApiService = RetrofitClient.service
 
-    suspend fun sentVerify(phone : String) : ApiResponse<List<UserInfoBody>>{
+    suspend fun sentVerify(phone : String) : ApiResponse<Verify>{
         return executeHttp {
             mApiService.sentVerify(phone)
+        }
+    }
+
+    suspend fun loginIn(account : String,password : String) : ApiResponse<UserToken>{
+        return executeHttp {
+            mApiService.loginIn(account,password)
         }
     }
 

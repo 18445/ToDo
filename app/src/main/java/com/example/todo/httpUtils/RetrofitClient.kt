@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit
 object RetrofitClient {
 
     //请求的地址
-    const val BASE_URL = "https://wuchenglin.plus"
+    const val BASE_URL = "https://wuchenglin.plus:8080"
 
     //retrofit对象
     private var retrofit: Retrofit? = null

@@ -20,7 +20,16 @@ interface ApiService {
      */
     @FormUrlEncoded
     @POST("/verify/sms/register")
-    suspend fun sentVerify(@Field("phone") phone : String) : ApiResponse<List<UserInfoBody>>
+    suspend fun sentVerify(@Field("phone") phone : String) : ApiResponse<Verify>
+
+    /**
+     * 密码登录
+     */
+    @FormUrlEncoded
+    @POST("/login/pwd")
+    suspend fun loginIn(@Field("account") account : String,@Field("password")password : String) : ApiResponse<UserToken>
+
+
 
 
 

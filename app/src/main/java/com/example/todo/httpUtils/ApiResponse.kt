@@ -33,7 +33,25 @@ data class ApiErrorResponse<T>(val throwable: Throwable) : ApiResponse<T>(error 
 
 
 // 用户个人信息
-data class UserInfoBody(
-    val userId: Int,
-    val username: String
+data class Verify(
+    val verifyCode: VerifyCode
 )
+
+data class VerifyCode(
+    val code: String,
+    val phone: String
+)
+
+data class UserToken(
+    val token: Token
+)
+
+data class Token(
+    val accessToken: String,
+    val refreshToken: String
+)
+
+//data class Token(
+//    val accessToken: String,
+//    val refreshToken: String
+//)

@@ -31,7 +31,7 @@ open class BaseRepository {
      */
     private fun <T> handleHttpError(e: Throwable): ApiErrorResponse<T> {
         if (BuildConfig.DEBUG) e.printStackTrace()
-//        handlingExceptions(e)
+        handlingExceptions(e)
         return ApiErrorResponse(e)
     }
 
@@ -42,7 +42,7 @@ open class BaseRepository {
         return if (data.isSuccess) {
             getHttpSuccessResponse(data)
         } else {
-//            handlingApiExceptions(data.errorCode, data.errorMsg)
+            handlingApiExceptions(data.code, data.msg)
             ApiFailedResponse(data.code, data.msg)
         }
     }

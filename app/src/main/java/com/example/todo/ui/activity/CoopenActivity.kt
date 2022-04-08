@@ -12,7 +12,7 @@ import com.example.todo.R
 import com.example.todo.base.BaseActivity
 import com.example.todo.databinding.ActivityCoopenBinding
 import com.example.todo.ui.activity.login.LoginActivity
-import com.example.todo.ui.viewModel.RegisterViewModel
+import com.example.todo.ui.viewModel.LoginViewModel
 import com.example.todo.utils.toast
 import kotlin.math.max
 
@@ -31,7 +31,7 @@ class CoopenActivity : BaseActivity() {
     private val mBtnMarginTop : MutableLiveData<Float> = MutableLiveData()
     private val mBtnMarginBottom : MutableLiveData<Float> = MutableLiveData()
 
-    private lateinit var mRegisterViewModel : RegisterViewModel
+    private lateinit var mLoginViewModel : LoginViewModel
 
 
     //1/2 1/4 屏幕的大小
@@ -46,7 +46,7 @@ class CoopenActivity : BaseActivity() {
         mBtnAlphaBottom.value = 1f
         mBtnAlphaTop.value = 0f
 
-        mRegisterViewModel = ViewModelProvider(this).get(RegisterViewModel::class.java)
+        mLoginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
     }
 
     override fun initView() {
