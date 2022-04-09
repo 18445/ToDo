@@ -1,13 +1,9 @@
 package com.example.todo.ui.viewModel
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo.db.model.UserLoginModel
-import com.example.todo.extension.StateLiveData
-import com.example.todo.httpUtils.UserToken
-import com.example.todo.httpUtils.Verify
 import com.example.todo.ui.repository.LoginRepository
 import kotlinx.coroutines.launch
 
@@ -17,15 +13,12 @@ import kotlinx.coroutines.launch
  * @Package:        com.example.todo.ui.viewModel
  * @ClassName:      RegisterViewModel
  * @Author:         Yan
- * @CreateDate:     2022年04月06日 10:27:00
+ * @CreateDate:     2022年04月09日 23:26:00
  * @UpdateRemark:   更新说明：
  * @Version:        1.0
- * @Description:     注册界面ViewModel
+ * @Description:    //注册的Viewmodel
  */
-class LoginViewModel : ViewModel(){
-
-    private val userInfo = StateLiveData<Verify>()
-    private val userToken = StateLiveData<UserToken>()
+class RegisterViewModel : ViewModel(){
 
     private val loginModelObservable : ObservableField<UserLoginModel> by lazy {
         val observable = ObservableField<UserLoginModel>()
@@ -34,6 +27,7 @@ class LoginViewModel : ViewModel(){
     }
 
     //双向绑定确定用户登录信息
+
     fun getUserAccount() : String? {
         return loginModelObservable.get()?.account
     }
@@ -72,17 +66,13 @@ class LoginViewModel : ViewModel(){
 
     fun sendVerify(phone : String){
         viewModelScope.launch {
-            userInfo.value = loginRepository.sentVerify(phone)
+            loginRepository.sentVerify(phone)
         }
     }
 
-    fun loginIn(account : String,password : String){
+    fun confirmVerify(username : String ,password : String ,phone:String ,verifyCode:String){
         viewModelScope.launch {
-            userToken.value = loginRepository.loginIn(account,password)
-            Log.d("userToken",userToken.value.toString())
+            loginRepository.confirmVerify(username,password,phone,verifyCode)
         }
     }
-
-
-
 }

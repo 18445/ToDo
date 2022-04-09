@@ -1,5 +1,7 @@
 package com.example.todo.ui.activity.login
 
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -8,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.todo.R
 import com.example.todo.base.BaseActivity
 import com.example.todo.ui.fragment.LoginWithPasswordFragment
@@ -17,6 +20,7 @@ import com.example.todo.ui.viewModel.LoginViewModel
 import com.example.todo.utils.toast
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlin.concurrent.thread
 
 
@@ -35,6 +39,13 @@ import kotlin.concurrent.thread
 class LoginActivity : BaseActivity(){
 
     private val fragments: ArrayList<Fragment> = ArrayList()
+    private val pagerCount = 2
+    private val activeSize = 15f
+    private val prepareSize = 12f
+    private var mCurrentPage = 0
+    private val mPhoneFragment = 0
+    private val mPasswordFragment = 1
+
 
     override fun initData() {
 
@@ -60,19 +71,9 @@ class LoginActivity : BaseActivity(){
 
         activityLoginBinding.mbtnLogin.also {
             it.setOnClickListener {
-
-                val userAccount : String? = loginViewModel.getUserAccount()
-                val password : String? = loginViewModel.getUserPassword()
-
-                val passwordFragment = fragments[1] as LoginWithPasswordFragment
-                if (passwordFragment.checkIfValidate() && userAccount != null && password != null) {
-                    loginViewModel.loginIn(userAccount,password)
-                }
-
-
+                loginIn(loginViewModel)
             }
         }
-
 
         activityLoginBinding.viewPager2.also{
 
@@ -86,7 +87,30 @@ class LoginActivity : BaseActivity(){
                     return fragments.size
                 }
             }
-        }
+
+            it.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    mCurrentPage = position
+                    activityLoginBinding.mbtnLogin.setBackgroundColor(
+                        if(mCurrentPage == mPhoneFragment) Color.parseColor("#ffb3a7")
+                        else Color.parseColor("#FF03DAC5"))
+
+                    for(i in 0 until pagerCount){
+                        val tab = tabLayout.getTabAt(position)
+                        val tabView = tab?.customView as TextView
+                        if (tab.position == position) {
+                            tabView.textSize = activeSize
+                            tabView.typeface = Typeface.DEFAULT_BOLD
+                        } else {
+                            tabView.textSize = prepareSize
+                            tabView.typeface = Typeface.DEFAULT
+                        }
+                    }
+
+                }
+            })
+
 
         val tabs : ArrayList<String> = arrayListOf("Phone","Password")
 
@@ -95,11 +119,36 @@ class LoginActivity : BaseActivity(){
             val tabView = TextView(this@LoginActivity);
 
             tabView.text = tabs[position]
-            tabView.textSize = 12f
+            tabView.textSize = prepareSize
             tabView.gravity = Gravity.CENTER
 
             tab.customView = tabView;
         }
         mediator.attach()
+    }
+
+    }
+    private fun loginIn(loginViewModel:LoginViewModel){
+
+        if(mCurrentPage == mPasswordFragment){
+            val userAccount : String? = loginViewModel.getUserAccount()
+            val password : String? = loginViewModel.getUserPassword()
+
+            val passwordFragment = fragments[mPasswordFragment] as LoginWithPasswordFragment
+            if (passwordFragment.checkIfValidate() && userAccount != null && password != null) {
+                loginViewModel.loginIn(userAccount,password)
+            }
+        }else if(mCurrentPage == mPhoneFragment){
+            val userPhone : String? = loginViewModel.getUserPhone()
+            val userVerify : String? = loginViewModel.getUserVerify()
+
+            toast("暂不支持手机登录")
+//            val phoneFragment = fragments[mPhoneFragment] as LoginWithPhoneFragment
+//            if(phoneFragment.checkVerify() && userPhone != null && userVerify != null){
+                  //TODO
+//                验证验证码是否合法
+//            }
+        }
+
     }
 }

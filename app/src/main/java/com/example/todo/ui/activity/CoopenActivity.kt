@@ -12,6 +12,7 @@ import com.example.todo.R
 import com.example.todo.base.BaseActivity
 import com.example.todo.databinding.ActivityCoopenBinding
 import com.example.todo.ui.activity.login.LoginActivity
+import com.example.todo.ui.activity.login.RegisterActivity
 import com.example.todo.ui.viewModel.LoginViewModel
 import com.example.todo.utils.toast
 import kotlin.math.max
@@ -119,7 +120,7 @@ class CoopenActivity : BaseActivity() {
             }
 
             it.setOnClickListener {
-                toast("aaaa")
+                startRegister()
             }
         }
 
@@ -144,5 +145,10 @@ class CoopenActivity : BaseActivity() {
     //开启登录界面
     private fun startLogin(){
         startActivity(Intent(this, LoginActivity::class.java))
+    }
+
+    //注册界面
+    private fun startRegister(){
+        startActivity(Intent(this, RegisterActivity::class.java))
     }
 }

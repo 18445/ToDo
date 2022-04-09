@@ -16,11 +16,11 @@ import retrofit2.http.*
 interface ApiService {
 
     /**
-     * 发送验证码
+     * 发送验证码(注册)
      */
     @FormUrlEncoded
     @POST("/verify/sms/register")
-    suspend fun sentVerify(@Field("phone") phone : String) : ApiResponse<Verify>
+    suspend fun sentRegisterVerify(@Field("phone") phone : String) : ApiResponse<Verify>
 
     /**
      * 密码登录
@@ -29,8 +29,12 @@ interface ApiService {
     @POST("/user/login/pwd")
     suspend fun loginIn(@Field("account") account : String,@Field("password")password : String) : ApiResponse<UserToken>
 
-
-
+    /**
+     * 注册账号
+     */
+    @FormUrlEncoded
+    @POST("/verify/sms/register")
+    suspend fun register(@Field("username") username : String,@Field("password")password : String,@Field("phone")phone:String,@Field("verify_code")verifyCode:String) : ApiResponse<Any>
 
 
 }

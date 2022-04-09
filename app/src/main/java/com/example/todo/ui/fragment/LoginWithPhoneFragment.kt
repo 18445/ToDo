@@ -12,10 +12,10 @@ import androidx.fragment.app.activityViewModels
 import com.example.todo.base.BaseFragment
 import com.example.todo.databinding.FragmentLoginPhoneBinding
 import com.example.todo.ui.viewModel.LoginViewModel
+import com.example.todo.utils.toast
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
-
-
+import kotlinx.android.synthetic.main.fragment_login_phone.*
 
 
 /**
@@ -42,7 +42,7 @@ class LoginWithPhoneFragment : BaseFragment() {
 
         loginPhoneBinding.mbtnSend.also {
             it.setOnClickListener { _ ->
-                countTime(it)
+                sendVerify()
             }
         }
     }
@@ -91,6 +91,41 @@ class LoginWithPhoneFragment : BaseFragment() {
         }.start()
     }
 
+
+    /**
+     * 验证手机号
+     * @param phone
+     * @return
+     */
+    private fun validatePhone(phone: String): Boolean {
+        if (phone.isEmpty()){
+            showError(til_phone, "手机号不能为空")
+            return false
+        }else if (phone.length != 11) {
+            showError(til_phone, "手机必须为11位号码")
+            return false
+        }
+        return true
+    }
+
+    /**
+     * 验证验证码
+     * @param verify
+     * @return
+     */
+    private fun validateVerify(verify: String): Boolean {
+        if (verify.isEmpty()) {
+            showError(til_verify, "验证码不能为空")
+            return false
+        }else if (verify.length != 6) {
+            showError(til_verify, "验证码必须是六位")
+            return false
+        }
+        return true
+    }
+
+
+
     /**
      * 显示错误提示，并获取焦点
      * @param textInputLayout
@@ -101,5 +136,45 @@ class LoginWithPhoneFragment : BaseFragment() {
         textInputLayout.editText!!.isFocusable = true
         textInputLayout.editText!!.isFocusableInTouchMode = true
         textInputLayout.editText!!.requestFocus()
+    }
+
+
+    /**
+     * 向用户发送验证码
+     */
+    private fun sendVerify(){
+        val userPhone : String? = mLoginViewModel.getUserPhone()
+
+        if(checkPhoneIfValidate() && userPhone != null){
+            countTime(loginPhoneBinding.mbtnSend)
+            toast("发送成功")
+            mLoginViewModel.sendVerify(userPhone)
+        }
+    }
+
+    /**
+     * 验证手机是否合法
+     */
+    private fun checkPhoneIfValidate() : Boolean{
+
+        val phone = til_phone.editText!!.text.toString()
+
+        til_phone.isErrorEnabled = false
+
+
+        return validatePhone(phone)
+    }
+
+    /**
+     * 验证验证码和手机是否合法
+     */
+    fun checkVerify() : Boolean{
+        val phone = til_verify.editText!!.text.toString()
+        val verify = til_phone.editText!!.text.toString()
+
+        til_phone.isErrorEnabled = false
+        til_verify.isErrorEnabled = false
+
+        return validatePhone(phone) && validateVerify(verify)
     }
 }

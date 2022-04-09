@@ -20,15 +20,30 @@ class LoginRepository : BaseRepository(){
 
     private val mApiService = RetrofitClient.service
 
-    suspend fun sentVerify(phone : String) : ApiResponse<Verify>{
-        return executeHttp {
-            mApiService.sentVerify(phone)
-        }
-    }
-
+    /**
+     * 账户 密码登录
+     */
     suspend fun loginIn(account : String,password : String) : ApiResponse<UserToken>{
         return executeHttp {
             mApiService.loginIn(account,password)
+        }
+    }
+
+    /**
+     * 注册发送验证码
+     */
+    suspend fun sentVerify(phone : String) : ApiResponse<Verify>{
+        return executeHttp {
+            mApiService.sentRegisterVerify(phone)
+        }
+    }
+
+    /**
+     * 验证验证码
+     */
+    suspend fun confirmVerify(username : String ,password : String ,phone:String ,verifyCode:String) : ApiResponse<Any>{
+        return executeHttp {
+            mApiService.register(username,password,phone,verifyCode)
         }
     }
 
