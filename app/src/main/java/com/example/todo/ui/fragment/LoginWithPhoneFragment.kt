@@ -13,6 +13,10 @@ import com.example.todo.base.BaseFragment
 import com.example.todo.databinding.FragmentLoginPhoneBinding
 import com.example.todo.ui.viewModel.LoginViewModel
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
+
+
+
 
 /**
  *
@@ -23,7 +27,7 @@ import com.google.android.material.button.MaterialButton
  * @CreateDate:     2022年04月08日 00:55:00
  * @UpdateRemark:   更新说明：
  * @Version:        1.0
- * @Description:     //TODO
+ * @Description:     手机登录界面的Fragment
  */
 class LoginWithPhoneFragment : BaseFragment() {
 
@@ -65,6 +69,9 @@ class LoginWithPhoneFragment : BaseFragment() {
         initData()
     }
 
+    /**
+     * 点击后进行六十秒倒计时并不可点击
+     */
     @SuppressLint("SetTextI18n")
     fun countTime(materialButton: MaterialButton ){
         ValueAnimator.ofInt(60,0).also { valueAnimator ->
@@ -84,4 +91,15 @@ class LoginWithPhoneFragment : BaseFragment() {
         }.start()
     }
 
+    /**
+     * 显示错误提示，并获取焦点
+     * @param textInputLayout
+     * @param error
+     */
+    private fun showError(textInputLayout: TextInputLayout, error: String) {
+        textInputLayout.error = error
+        textInputLayout.editText!!.isFocusable = true
+        textInputLayout.editText!!.isFocusableInTouchMode = true
+        textInputLayout.editText!!.requestFocus()
+    }
 }

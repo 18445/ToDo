@@ -60,15 +60,15 @@ class LoginActivity : BaseActivity(){
 
         activityLoginBinding.mbtnLogin.also {
             it.setOnClickListener {
-                val password : String? = loginViewModel.getUserAccount()
-                val userAccount : String? = loginViewModel.getUserPassword()
 
-                if (password != null) {
-                    Log.d("activityLoginBinding",password)
+                val userAccount : String? = loginViewModel.getUserAccount()
+                val password : String? = loginViewModel.getUserPassword()
+
+                val passwordFragment = fragments[1] as LoginWithPasswordFragment
+                if (passwordFragment.checkIfValidate() && userAccount != null && password != null) {
+                    loginViewModel.loginIn(userAccount,password)
                 }
-                if (userAccount != null) {
-                    Log.d("activityLoginBinding",userAccount)
-                }
+
 
             }
         }

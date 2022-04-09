@@ -59,7 +59,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
 
             android:layout_width="225dp"
-            android:layout_height="75dp"
+            android:layout_height="90dp"
             app:boxStrokeColor="@color/black"
             app:endIconMode="clear_text"
             app:hintTextColor="@color/black"
@@ -81,7 +81,7 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="300dp"
-            android:layout_height="75dp"
+            android:layout_height="90dp"
             android:layout_marginTop="12dp"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,5 +1,6 @@
 package com.example.todo.ui.viewModel
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -80,6 +81,7 @@ class LoginViewModel : ViewModel(){
     fun loginIn(account : String,password : String){
         viewModelScope.launch {
             userToken.value = loginRepository.loginIn(account,password)
+            Log.d("userToken",userToken.value.toString())
         }
     }
 

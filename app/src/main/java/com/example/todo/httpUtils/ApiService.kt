@@ -26,7 +26,7 @@ interface ApiService {
      * 密码登录
      */
     @FormUrlEncoded
-    @POST("/login/pwd")
+    @POST("/user/login/pwd")
     suspend fun loginIn(@Field("account") account : String,@Field("password")password : String) : ApiResponse<UserToken>
 
 
