@@ -8,6 +8,7 @@ android {
 
     buildFeatures {
         dataBinding true
+        viewBinding true
     }
 
     defaultConfig {
@@ -40,6 +41,11 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
 dependencies {
+
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'androidx.annotation:annotation:1.2.0'
+
     def activity_version = "1.2.0"
     def fragment_version = "1.3.0"
     implementation "androidx.activity:activity-ktx:$activity_version"

@@ -7,18 +7,30 @@
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable-v24/search_bg.xml" value="0.266" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/button_gradient_background.xml" value="0.1885" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/coopen_gradient_background.xml" value="0.1885" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/ic_bottom_my.xml" value="0.288" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/ic_bottom_setting.xml" value="0.288" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/ic_bottom_task.xml" value="0.288" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/ic_continue_password.xml" value="0.1885" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/ic_continue_phone.xml" value="0.1885" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/ic_right_arrow.xml" value="0.266" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/ic_user.xml" value="0.2735" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/menu_item_selected.xml" value="0.288" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/drawable/send_gradient_background.xml" value="0.266" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/activity_coopen.xml" value="0.25" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/activity_login.xml" value="0.36614583333333334" />
-        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/activity_main.xml" value="0.3515625" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/activity_register.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/fragment_login.xml" value="0.34739583333333335" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/fragment_login_password.xml" value="0.3515625" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/fragment_login_phone.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/fragment_my.xml" value="0.3619791666666667" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/fragment_setting.xml" value="0.3619791666666667" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/fragment_task.xml" value="0.3619791666666667" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/toolbar_layout.xml" value="0.36614583333333334" />
         <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/layout/toolbar_layout_search.xml" value="0.36614583333333334" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/menu/main_menu.xml" value="0.3619791666666667" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/menu/main_menu1.xml" value="0.3619791666666667" />
+        <entry key="..\:/AndroidStudio/ToDo/app/src/main/res/menu/menu_main.xml" value="0.3619791666666667" />
       </map>
     </option>
   </component>

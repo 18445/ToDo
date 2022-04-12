@@ -66,8 +66,9 @@ abstract class BaseActivity : AppCompatActivity() {
 
     private fun observeUi() {
         LiveEventBus.get<String>(SHOW_TOAST).observe(this) {
-            Toast.makeText(this,it,Toast.LENGTH_SHORT).show()
+            toast(it)
         }
+
         LiveEventBus.get<Boolean>(LOADING_STATE).observe(this) {
             if (it) showLoading() else hideLoading()
         }

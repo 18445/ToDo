@@ -29,6 +29,7 @@ class StateLiveData<T> : MutableLiveData<ApiResponse<T>>() {
 
             override fun onError(e: Throwable) {
                 listener.mErrorListenerAction?.invoke(e) ?: toast("Http Error")
+//                listener.mErrorListenerAction?.invoke(e)
             }
 
             override fun onDataEmpty() {

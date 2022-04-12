@@ -24,8 +24,8 @@ import kotlinx.coroutines.launch
  */
 class LoginViewModel : ViewModel(){
 
-    private val userInfo = StateLiveData<Verify>()
-    private val userToken = StateLiveData<UserToken>()
+//    private val userInfo = StateLiveData<Verify>()
+    val userToken = StateLiveData<UserToken>()
 
     private val loginModelObservable : ObservableField<UserLoginModel> by lazy {
         val observable = ObservableField<UserLoginModel>()
@@ -70,11 +70,11 @@ class LoginViewModel : ViewModel(){
         LoginRepository()
     }
 
-    fun sendVerify(phone : String){
-        viewModelScope.launch {
-            userInfo.value = loginRepository.sentVerify(phone)
-        }
-    }
+//    fun sendVerify(phone : String){
+//        viewModelScope.launch {
+//            userInfo.value = loginRepository.sentVerify(phone)
+//        }
+//    }
 
     fun loginIn(account : String,password : String){
         viewModelScope.launch {

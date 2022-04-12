@@ -15,6 +15,17 @@
             android:id="@+id/include"
             layout="@layout/toolbar_layout" />
 
+        <ImageView
+            android:shadowRadius="10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_user"
+            app:layout_constraintBottom_toTopOf="@+id/viewPager2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tlt_top_barrier"
+            app:layout_constraintVertical_bias="0.0" />
+
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/tlt_top_barrier"
             android:layout_width="wrap_content"

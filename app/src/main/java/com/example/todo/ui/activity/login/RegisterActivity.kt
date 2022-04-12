@@ -4,6 +4,7 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.LinearInterpolator
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -12,6 +13,7 @@ import com.example.todo.base.BaseActivity
 import com.example.todo.databinding.ActivityRegisterBinding
 import com.example.todo.ui.viewModel.LoginViewModel
 import com.example.todo.ui.viewModel.RegisterViewModel
+import com.example.todo.utils.MyMMKV.mmkv
 import com.example.todo.utils.toast
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
@@ -47,7 +49,7 @@ class RegisterActivity : BaseActivity(){
         super.onCreate(savedInstanceState)
         val activityRegisterBinding : ActivityRegisterBinding= DataBindingUtil.setContentView(this, R.layout.activity_register)
         activityRegisterBinding.loginViewModel = registerViewModel
-        setTop("登录")
+        setTop("注册")
 
         activityRegisterBinding.mbtnSend.also { materialButton ->
             materialButton.setOnClickListener {
@@ -70,8 +72,13 @@ class RegisterActivity : BaseActivity(){
 
         if( userPhone != null && validatePhone(userPhone)){
             countTime(btnSend)
-            toast("发送成功")
+
             registerViewModel.sendVerify(userPhone)
+            registerViewModel.verifyInfo.observeState(this){
+                onSuccess {
+                    toast("发送成功")
+                }
+            }
         }
     }
 
@@ -90,6 +97,12 @@ class RegisterActivity : BaseActivity(){
         if( userAccount != null && userPassword != null && userPhone != null &&  userVerify != null &&
             validateAccount(userAccount) && validatePassword(userPassword) &&validatePhone(userPhone) &&  validateVerify(userVerify) ){
             registerViewModel.confirmVerify(userAccount,userPassword,userPassword,userVerify)
+            registerViewModel.registerInfo.observeState(this){
+                onSuccess {
+                    toast("注册成功")
+                    onBackPressed()
+                }
+            }
         }
 
 

@@ -7,6 +7,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.view.View
 import com.example.todo.R
+import com.example.todo.constant.Constant
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -91,6 +92,8 @@ fun String.stringToCalendar(): Calendar {
     val sdf = SimpleDateFormat("yyyy-MM-dd")
     val date = sdf.parse(this)
     val calendar = Calendar.getInstance()
-    calendar.time = date
+    if (date != null) {
+        calendar.time = date
+    }
     return calendar
 }

@@ -15,6 +15,7 @@ import com.example.todo.httpUtils.*
  * @Description:     //TODO
  */
 open class BaseRepository {
+
     suspend fun <T> executeHttp(block : suspend()->ApiResponse<T>):ApiResponse<T>{
         kotlin.runCatching {
             block.invoke()

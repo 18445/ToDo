@@ -4,6 +4,8 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todo.db.model.UserLoginModel
+import com.example.todo.extension.StateLiveData
+import com.example.todo.httpUtils.Verify
 import com.example.todo.ui.repository.LoginRepository
 import kotlinx.coroutines.launch
 
@@ -19,6 +21,9 @@ import kotlinx.coroutines.launch
  * @Description:    //注册的Viewmodel
  */
 class RegisterViewModel : ViewModel(){
+
+    val verifyInfo = StateLiveData<Verify>()
+    val registerInfo = StateLiveData<Any>()
 
     private val loginModelObservable : ObservableField<UserLoginModel> by lazy {
         val observable = ObservableField<UserLoginModel>()
@@ -66,13 +71,13 @@ class RegisterViewModel : ViewModel(){
 
     fun sendVerify(phone : String){
         viewModelScope.launch {
-            loginRepository.sentVerify(phone)
+            verifyInfo.value = loginRepository.sentVerify(phone)
         }
     }
 
     fun confirmVerify(username : String ,password : String ,phone:String ,verifyCode:String){
         viewModelScope.launch {
-            loginRepository.confirmVerify(username,password,phone,verifyCode)
+            registerInfo.value = loginRepository.confirmVerify(username,password,phone,verifyCode)
         }
     }
 }

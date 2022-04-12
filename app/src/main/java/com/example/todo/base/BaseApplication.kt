@@ -1,7 +1,16 @@
 package com.example.todo.base
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.content.ContentValues.TAG
+import android.content.Context
+import android.util.Log
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 import com.example.todo.httpUtils.ApiService
+import com.tencent.mmkv.MMKV
 
 /**
  *
@@ -14,10 +23,26 @@ import com.example.todo.httpUtils.ApiService
  * @Version:        1.0
  * @Description:     Application 管理全局变量
  */
-object BaseApplication : Application() {
+
+class BaseApplication : Application() {
+
+
+    companion object {
+
+
+        lateinit var instance: Application
+    }
+
+
+
 
     override fun onCreate() {
         super.onCreate()
+
+        instance = this
+
+        val rootDir = MMKV.initialize(this)
+        Log.d(TAG, "mmkv_root------:${rootDir}")
 
     }
 
@@ -25,3 +50,5 @@ object BaseApplication : Application() {
 
 
 }
+
+

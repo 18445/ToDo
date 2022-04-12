@@ -1,4 +1,4 @@
-package com.example.todo.ui.fragment
+package com.example.todo.ui.fragment.login
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -41,7 +41,7 @@ class LoginWithPhoneFragment : BaseFragment() {
         loginPhoneBinding.loginViewModel = mLoginViewModel
 
         loginPhoneBinding.mbtnSend.also {
-            it.setOnClickListener { _ ->
+            it.setOnClickListener {
                 sendVerify()
             }
         }
@@ -148,7 +148,8 @@ class LoginWithPhoneFragment : BaseFragment() {
         if(checkPhoneIfValidate() && userPhone != null){
             countTime(loginPhoneBinding.mbtnSend)
             toast("发送成功")
-            mLoginViewModel.sendVerify(userPhone)
+//            mLoginViewModel.sendVerify(userPhone)
+            //TODO
         }
     }
 
