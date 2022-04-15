@@ -39,15 +39,19 @@ android {
 
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.android.application'
 
 dependencies {
+    implementation 'com.google.android.gms:play-services-location:19.0.1'
 
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
-    implementation 'androidx.annotation:annotation:1.2.0'
+    implementation 'androidx.annotation:annotation:1.3.0'
+    implementation files('libs\\QWeather_Public_Android_V4.8.jar')
+    implementation files('libs\\QWeather_Plugin_SDK_Android_V1.5.jar')
 
-    def activity_version = "1.2.0"
-    def fragment_version = "1.3.0"
+    def activity_version = "1.2.3"
+    def fragment_version = "1.3.5"
     implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.fragment:fragment-ktx:$fragment_version"
 

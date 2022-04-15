@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/top1"
+        android:icon="@drawable/ic_bottom_my"
+        android:title="t1" />
+
+
+    <item
+        android:id="@+id/top2"
+        android:icon="@drawable/ic_bottom_task"
+        android:title="t2" />
+
+    <item
+        android:id="@+id/top3"
+        android:icon="@drawable/ic_bottom_my"
+        android:title="t3" />
+
+</menu>

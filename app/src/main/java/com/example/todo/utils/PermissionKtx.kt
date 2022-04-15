@@ -50,3 +50,4 @@ inline fun AppCompatActivity.requestPermission(
         }
     }.launch(permission)
 }
+

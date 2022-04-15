@@ -12,28 +12,25 @@ package com.example.todo.base
  * @Version:        1.0
  * @Description:     BaseActivity activity的基类
  */
+
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import com.example.todo.R
-import com.example.todo.utils.LOADING_STATE
-import com.example.todo.utils.SHOW_TOAST
-import com.example.todo.utils.getRotateAnimation
-import com.example.todo.utils.toast
+import com.example.todo.utils.*
 import com.jeremyliao.liveeventbus.LiveEventBus
 import kotlinx.android.synthetic.main.toolbar_layout.*
-import kotlinx.android.synthetic.main.toolbar_layout.toolbar
 import kotlinx.android.synthetic.main.toolbar_layout.toolbar_left_image_back
 import kotlinx.android.synthetic.main.toolbar_layout.toolbar_subtitle
 import kotlinx.android.synthetic.main.toolbar_layout.toolbar_subtitle_image
@@ -48,6 +45,8 @@ abstract class BaseActivity : AppCompatActivity() {
         val dm: DisplayMetrics = resources.displayMetrics
         dm.heightPixels
     }
+
+
 
     /**
      * 初始化数据
@@ -186,5 +185,16 @@ abstract class BaseActivity : AppCompatActivity() {
                 toolbar_subtitle_image?.visibility = View.GONE
             }
         }
+    }
+
+
+    override fun onBackPressed() {
+        if(!interceptBackPress()){
+            super.onBackPressed()
+        }
+    }
+
+    private fun interceptBackPress() : Boolean{
+        return BackHandlerHelper.handleBackPress(this)
     }
 }

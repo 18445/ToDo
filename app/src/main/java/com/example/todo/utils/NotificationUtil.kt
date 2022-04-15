@@ -60,6 +60,14 @@ object NotificationUtil {
     //通知ID
     private const val NotifyId = 0
 
+    //Notification对象
+    lateinit var notificationManager: NotificationManager
+
+    //default 的设置
+    var sound : Boolean = true
+    var vibrate : Boolean = true
+    var lights : Boolean = true
+
     /**
      * 适配 Android8.0  创建通知渠道
      * 需要保证在通知弹出之前调用就可以了。并且创建通知渠道的代码只在第一次执行的时候才会创建，
@@ -67,12 +75,14 @@ object NotificationUtil {
      */
     fun setNotificationChannel(context : Context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            var importance = NotificationManager.IMPORTANCE_HIGH
             var channelId = NEW_MESSAGE
             var channelName = "新消息通知"
-            createNotificationChannel(context, channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            createNotificationChannel(context, channelId, channelName,importance)
             channelId = OTHER_MESSAGE
             channelName = "其他通知"
-            createNotificationChannel(context, channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+            importance = NotificationManager.IMPORTANCE_DEFAULT
+            createNotificationChannel(context, channelId, channelName,importance)
         }
     }
 
@@ -106,7 +116,7 @@ object NotificationUtil {
         channel.lightColor = Color.BLUE
         // 设置是否可以绕过请勿打扰模式
         channel.setBypassDnd(true)
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as (NotificationManager)
+        notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as (NotificationManager)
         notificationManager.createNotificationChannel(channel)
     }
 
@@ -120,7 +130,7 @@ object NotificationUtil {
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun createNotificationGroup(context:Context,groupId:String,groupName:String) {
         val group = NotificationChannelGroup(groupId, groupName)
-        val notificationManager =  context.getSystemService(Context.NOTIFICATION_SERVICE) as (NotificationManager)
+        notificationManager =  context.getSystemService(Context.NOTIFICATION_SERVICE) as (NotificationManager)
         notificationManager.createNotificationChannelGroup(group)
     }
 
@@ -180,7 +190,7 @@ object NotificationUtil {
             .setWhen(System.currentTimeMillis()) // 设置通知发送的时间戳
             .setShowWhen(true)// 设置是否显示时间戳
             .setAutoCancel(true)// 点击通知后通知在通知栏上消失
-            .setDefaults(NotificationManager.IMPORTANCE_HIGH)// 设置默认的提示音、振动方式、灯光等 使用的默认通知选项
+            .setDefaults(getDefault())// 设置默认的提示音、振动方式、灯光等 使用的默认通知选项
             .setContentIntent(pendingIntent) // 设置通知的点击事件
             // 锁屏状态下显示通知图标及标题
             // 1、VISIBILITY_PUBLIC 在所有锁定屏幕上完整显示此通知
@@ -251,7 +261,7 @@ object NotificationUtil {
                 return false
             }
         }
-        return true;
+        return true
     }
 
     /**
@@ -275,5 +285,38 @@ object NotificationUtil {
         context.startActivity(intent)
     }
 
+    /**
+     * 设定权限的默认值
+     */
+    private fun getDefault():Int{
+        val default = 0
+        if(sound){
+            default.or(Notification.DEFAULT_SOUND)
+        }
+
+        if (vibrate){
+            default.or(Notification.DEFAULT_VIBRATE)
+        }
+
+        if(lights){
+            default.or(Notification.DEFAULT_LIGHTS)
+        }
+
+        return default
+    }
+
+    fun setDefault(isSound:Boolean = true,isVibrate:Boolean = true,isLights : Boolean = true){
+        sound = isSound
+        vibrate = isVibrate
+        lights = isLights
+    }
+
+    fun clear(){
+
+        if(this::notificationManager.isInitialized){
+            notificationManager.cancelAll()
+        }
+
+    }
 
 }

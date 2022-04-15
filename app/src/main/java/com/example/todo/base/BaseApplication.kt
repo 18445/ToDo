@@ -10,6 +10,8 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.example.todo.httpUtils.ApiService
+import com.qweather.plugin.view.QWeatherConfig
+import com.qweather.sdk.view.HeConfig
 import com.tencent.mmkv.MMKV
 
 /**
@@ -38,6 +40,10 @@ class BaseApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        QWeatherConfig.init("d3da066cd5f94ab69445c4763b2531a3")
+        HeConfig.init("HE2204142033381774","c7c64dfc56ef41349784636d554d6d15")
+        HeConfig.switchToDevService()
 
         instance = this
 
