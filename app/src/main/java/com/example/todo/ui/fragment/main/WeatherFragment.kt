@@ -3,7 +3,6 @@ package com.example.todo.ui.fragment.main
 import android.Manifest
 import android.content.Context.LOCATION_SERVICE
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.*
 import android.os.Build
 import android.os.Bundle
@@ -14,15 +13,20 @@ import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.todo.R
 import com.example.todo.base.BaseApplication
 import com.example.todo.base.BaseFragment
 import com.example.todo.databinding.FragmentWeatherBinding
+import com.example.todo.ui.viewModel.WeatherViewModel
+import com.example.todo.utils.getNoMoreThanTwoDigits
 
 import com.example.todo.utils.toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.qweather.plugin.view.HeContent
-import com.qweather.plugin.view.HorizonView
+import com.qweather.sdk.bean.geo.GeoBean
+import com.qweather.sdk.bean.weather.WeatherNowBean
+import com.qweather.sdk.view.QWeather
 
 
 /**
@@ -37,16 +41,39 @@ import com.qweather.plugin.view.HorizonView
  */
 
 class WeatherFragment :BaseFragment(){
+    private lateinit var address:String
+    private lateinit var weatherBinding: FragmentWeatherBinding
 
-    private lateinit var taskFragment: FragmentWeatherBinding
-    private lateinit var locationManager : LocationManager
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val locationManager : LocationManager by lazy {
+        (BaseApplication.instance.getSystemService(LOCATION_SERVICE) as LocationManager)
+    }
+
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireActivity())
+    }
+
+    private val weatherViewModel: WeatherViewModel by lazy {
+        ViewModelProvider(this).get(WeatherViewModel::class.java)
+    }
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initData() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-        locationManager = (BaseApplication.instance.getSystemService(LOCATION_SERVICE) as LocationManager)
+        getPermission()
 
+    }
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        weatherBinding = FragmentWeatherBinding.inflate(inflater)
+        return weatherBinding.root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun getPermission(){
         val locationPermissionRequest = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) { permissions ->
@@ -61,8 +88,8 @@ class WeatherFragment :BaseFragment(){
                     getLocationInfo()
                     // Only approximate location access granted.
                 } else -> {
-                    // No location access granted.
-                    toast("没有权限")
+                // No location access granted.
+                toast("没有权限")
             }
             }
         }
@@ -88,17 +115,6 @@ class WeatherFragment :BaseFragment(){
 //                    Log.d("fusedLocationClient","${it.provider} 经度：${it.longitude}  纬度：${it.latitude}")
 //                }
 //        }
-
-    }
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        taskFragment = FragmentWeatherBinding.inflate(inflater)
-        return taskFragment.root
     }
 
     private fun locationMonitor(provider: String) {
@@ -137,6 +153,7 @@ class WeatherFragment :BaseFragment(){
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     private fun getLocationInfo() {
         //判断是否开启位置服务，没有则跳转至设置来开启
         if (isLocationServiceOpen()) {
@@ -173,6 +190,15 @@ class WeatherFragment :BaseFragment(){
             }
             betterLocation?.let {
                 Log.i(TAG, "精度最高的获取方式：${it.provider} 经度：${it.longitude}  纬度：${it.latitude}")
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    initAddress(it)
+                    if(this::address.isLateinit){
+                        getWeatherNow()
+                        getCity()
+                    }
+                }else{
+                    toast("当前手机版本过低")
+                }
             }
             //（四）若所支持的provider获取到的位置均为空，则开启连续定位服务
             if (betterLocation == null) {
@@ -195,15 +221,58 @@ class WeatherFragment :BaseFragment(){
         return gps || network
     }
 
-
     override fun initView(view: View) {
 
+        weatherViewModel.also { weatherViewModel ->
+            weatherViewModel.mWeatherNowBean.observe(this){
+                weatherBinding.weather = it.now
+            }
+            weatherViewModel.mGeoBean.observe(this){
+                weatherBinding.location = it.locationBean[0]
+            }
+        }
+        weatherBinding.cardView.setBackgroundResource(R.drawable.card_gradient_background)
     }
 
     override fun startHttp() {
 
     }
 
+    private fun getCity(){
+        weatherViewModel.getCity(requireContext(),address,object : QWeather.OnResultGeoListener{
+            override fun onError(p0: Throwable?) {
+                toast("网络出现异常")
+                Log.e(TAG,p0.toString())
+            }
+
+            override fun onSuccess(p0: GeoBean?) {
+                weatherViewModel.mGeoBean.value = p0
+            }
+
+        })
+    }
+
+
+    private fun getWeatherNow(){
+        weatherViewModel.getWeatherNow(requireContext(),address,object :QWeather.OnResultWeatherNowListener{
+            override fun onError(p0: Throwable?) {
+                toast("网络出现异常")
+                Log.e(TAG,p0.toString())
+            }
+
+            override fun onSuccess(p0: WeatherNowBean?) {
+                weatherViewModel.mWeatherNowBean.value = p0
+            }
+        })
+
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    private fun initAddress(location: Location){
+        val longitude = location.longitude.getNoMoreThanTwoDigits()
+        val latitude = location.latitude.getNoMoreThanTwoDigits()
+        address = "${longitude},${latitude}"
+    }
 }
 
 

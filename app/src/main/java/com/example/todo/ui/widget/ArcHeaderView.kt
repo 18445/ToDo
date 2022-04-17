@@ -1,4 +1,4 @@
-package com.example.todo.ui.view
+package com.example.todo.ui.widget
 
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
@@ -7,7 +7,6 @@ import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import androidx.annotation.ColorInt

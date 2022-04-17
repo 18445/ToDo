@@ -1,14 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
-
+        <variable
+            name="weather"
+            type="com.qweather.sdk.bean.weather.WeatherNowBean.NowBaseBean" />
+        <variable
+            name="location"
+            type="com.qweather.sdk.bean.geo.GeoBean.LocationBean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/card_top_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/card_bottom_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/card_left_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/card_right_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            app:cardBackgroundColor="@color/black"
+            android:background="@drawable/card_gradient_background"
+            app:cardElevation="10dp"
+            android:shadowRadius="45"
+            app:cardCornerRadius="25dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/card_bottom_barrier"
+            app:layout_constraintEnd_toStartOf="@+id/card_right_barrier"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/card_left_barrier"
+            app:layout_constraintTop_toTopOf="@+id/card_top_barrier"
+            app:layout_constraintVertical_bias="1.0">
+
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="@{location.name}"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+            <TextView
+                android:textSize="50sp"
+                android:text='@{weather.temp+"°"}'
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:id="@+id/temperature"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="55dp" />
+
+            <TextView
+                android:text="@{weather.text}"
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:id="@+id/status"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="115dp"
+                android:layout_marginTop="55dp" />
+
+            <TextView
+                android:text='@{weather.windDir+weather.windScale+"级"}'
+                android:textSize="20sp"
+                android:textColor="@color/white"
+                android:id="@+id/wind"
+                android:layout_width="125dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="115dp"
+                android:layout_marginTop="105dp" />
+
+            <TextView
+                android:text="湿度"
+                android:textSize="18sp"
+                android:textColor="@color/gray"
+                android:id="@+id/humidity_title"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="150dp" />
+
+            <TextView
+                android:text='@{weather.humidity+"%"}'
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:id="@+id/humidity_text"
+                android:layout_width="40dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="75dp"
+                android:layout_marginTop="150dp" />
+
+            <TextView
+                android:text="大气压"
+                android:textSize="18sp"
+                android:textColor="@color/gray"
+                android:id="@+id/pressure_title"
+                android:layout_width="60dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="150dp"
+                android:layout_marginTop="150dp" />
+
+            <TextView
+                android:text='@{weather.pressure+"hPa"}'
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:id="@+id/pressure_text"
+                android:layout_width="128dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="220dp"
+                android:layout_marginTop="150dp" />
+
+
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/scroll_top_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
+
+
+        <com.example.todo.ui.widget.WeatherView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/recyclerview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/card_bottom_barrier" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="413dp"
+            android:layout_height="373dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/scroll_top_barrier"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

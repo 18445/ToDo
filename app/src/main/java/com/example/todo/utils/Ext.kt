@@ -3,12 +3,16 @@ package com.example.todo.utils
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.view.View
-import com.example.todo.R
+import androidx.annotation.RequiresApi
 import com.example.todo.constant.Constant
 import java.io.File
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -96,4 +100,25 @@ fun String.stringToCalendar(): Calendar {
         calendar.time = date
     }
     return calendar
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+fun Double.getNoMoreThanTwoDigits(): String {
+    val format = DecimalFormat("0.##")
+    //未保留小数的舍弃规则，RoundingMode.FLOOR表示直接舍弃。
+    format.roundingMode = RoundingMode.FLOOR
+    return format.format(this)
+}
+
+inline fun View.onSafeClick(crossinline onTap: () -> Unit,duration : Long = 1500L){
+    if(!this.isClickable){
+        return
+    }
+    var lastClick=0L
+    setOnClickListener {
+        val gap = System.currentTimeMillis() - lastClick
+        lastClick=System.currentTimeMillis()
+        if(gap < duration) return@setOnClickListener
+        onTap.invoke()
+    }
 }

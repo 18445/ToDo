@@ -24,7 +24,7 @@
         android:background="@drawable/coopen_gradient_background"
         tools:context=".ui.activity.CoopenActivity">
 
-        <com.example.todo.ui.view.ArcHeaderView
+        <com.example.todo.ui.widget.ArcHeaderView
             android:id="@+id/ahv_top"
             android:layout_width="match_parent"
             android:layout_height="250dp"
