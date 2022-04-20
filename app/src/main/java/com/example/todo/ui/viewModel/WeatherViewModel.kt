@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.todo.extension.StateLiveData
 import com.example.todo.ui.repository.main.WeatherRepository
 import com.qweather.sdk.bean.geo.GeoBean
+import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.qweather.sdk.view.QWeather
 import kotlinx.coroutines.launch
@@ -29,6 +30,7 @@ class WeatherViewModel : ViewModel() {
 
     val mWeatherNowBean : MutableLiveData<WeatherNowBean> = MutableLiveData()
     val mGeoBean : MutableLiveData<GeoBean> = MutableLiveData()
+    val mWeatherHourlyBean : MutableLiveData<WeatherHourlyBean> = MutableLiveData()
 
 
     //获得当前时间的天气
@@ -41,6 +43,12 @@ class WeatherViewModel : ViewModel() {
     fun getCity(context: Context,location: String,listener: QWeather.OnResultGeoListener){
         viewModelScope.launch {
             mWeatherRepository.getCity(context, location, listener)
+        }
+    }
+
+    fun getWeather24Hourly(context: Context,location: String,listener:QWeather.OnResultWeatherHourlyListener){
+        viewModelScope.launch {
+            mWeatherRepository.getWeather24Hourly(context,location,listener)
         }
     }
 

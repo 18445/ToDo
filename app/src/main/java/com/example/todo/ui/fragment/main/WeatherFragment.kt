@@ -19,12 +19,14 @@ import com.example.todo.base.BaseApplication
 import com.example.todo.base.BaseFragment
 import com.example.todo.databinding.FragmentWeatherBinding
 import com.example.todo.ui.viewModel.WeatherViewModel
+import com.example.todo.utils.dayToHourTime
 import com.example.todo.utils.getNoMoreThanTwoDigits
 
 import com.example.todo.utils.toast
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.qweather.sdk.bean.geo.GeoBean
+import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.qweather.sdk.view.QWeather
 
@@ -44,6 +46,8 @@ class WeatherFragment :BaseFragment(){
     private lateinit var address:String
     private lateinit var weatherBinding: FragmentWeatherBinding
 
+    private val mHourList = mutableListOf<String>()
+    private val mTempList = mutableListOf<Int>()
     private val locationManager : LocationManager by lazy {
         (BaseApplication.instance.getSystemService(LOCATION_SERVICE) as LocationManager)
     }
@@ -195,6 +199,7 @@ class WeatherFragment :BaseFragment(){
                     if(this::address.isLateinit){
                         getWeatherNow()
                         getCity()
+                        getWeather24Hourly()
                     }
                 }else{
                     toast("当前手机版本过低")
@@ -264,7 +269,27 @@ class WeatherFragment :BaseFragment(){
                 weatherViewModel.mWeatherNowBean.value = p0
             }
         })
+    }
 
+    private fun getWeather24Hourly(){
+        weatherViewModel.getWeather24Hourly(requireContext(),address,object :QWeather.OnResultWeatherHourlyListener{
+            override fun onError(p0: Throwable?) {
+                toast("网络出现异常")
+                Log.e(TAG,p0.toString())
+            }
+
+            override fun onSuccess(p0: WeatherHourlyBean?) {
+                weatherViewModel.mWeatherHourlyBean.value = p0
+                p0?.also { weatherHourlyBean ->
+                    weatherHourlyBean.hourly.forEach {
+                       mHourList.add(it.fxTime.dayToHourTime())
+                       mTempList.add(it.temp.toInt())
+                       showHourWeather()
+                   }
+                }
+            }
+
+        })
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
@@ -272,6 +297,12 @@ class WeatherFragment :BaseFragment(){
         val longitude = location.longitude.getNoMoreThanTwoDigits()
         val latitude = location.latitude.getNoMoreThanTwoDigits()
         address = "${longitude},${latitude}"
+    }
+
+    private fun showHourWeather(){
+        weatherBinding.weatherView.initTempPoint(mTempList)
+        weatherBinding.weatherView.initHourText(mHourList)
+        weatherBinding.weatherView.show()
     }
 }
 

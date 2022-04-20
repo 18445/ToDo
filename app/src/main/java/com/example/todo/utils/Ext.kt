@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.os.SystemClock
 import android.provider.MediaStore
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -27,6 +26,7 @@ import java.util.*
  * @Version:        1.0
  * @Description:     //TODO
  */
+
 /**
  * 拍照
  *
@@ -46,6 +46,17 @@ fun captureImage(activity: Activity) {
         Constant.IMAGE_CAPTURE
     )
 }
+
+
+/**
+ * 将日期转换为具体时间.
+ */
+fun String.dayToHourTime(): String {
+    val arr1 = this.split("T")
+    val arr2 = arr1[1].split("+")
+    return arr2[0]
+}
+
 
 /**
  * 从图库中选取图片

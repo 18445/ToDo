@@ -151,13 +151,15 @@
 
 
         <com.example.todo.ui.widget.WeatherView
+            android:id="@+id/weatherView"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             app:layout_constraintBottom_toTopOf="@+id/recyclerview"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/card_bottom_barrier" />
+            app:layout_constraintTop_toTopOf="@+id/card_bottom_barrier"
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"

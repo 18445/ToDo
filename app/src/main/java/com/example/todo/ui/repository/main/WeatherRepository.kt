@@ -31,5 +31,11 @@ class WeatherRepository : BaseRepository(){
         }
     }
 
+    suspend fun getWeather24Hourly(context: Context,location: String,listener:QWeather.OnResultWeatherHourlyListener){
+        withContext(Dispatchers.IO){
+            QWeather.getWeather24Hourly(context,location,listener)
+        }
+    }
+
 
 }

@@ -40,14 +40,18 @@ class WeatherView constructor(
 
     //温度点
 //    private val mTempPoints = mutableListOf<Int>()
-    private val mTempPoints = mutableListOf(12,12,12,13,11,12,12,12,12,11,12,13)
+    private lateinit var mTempPoints : MutableList<Int>
+    private lateinit var mHourText : MutableList<String>
 
     //贝塞尔曲线点
-    private val mPath = Path()
+    private val  mPath = Path()
 
     //画小圆
     private val mPointPaint = Paint()
     private val mCorner = 5f
+
+    //下方虚线点
+    private var mBottomPath = Path()
 
     //上方提示点
     private var currentText : String = ""
@@ -66,7 +70,6 @@ class WeatherView constructor(
     }
     private var offsetTop = 75f
     private val mHintPaint = Paint()
-    private val mMatrix = Matrix()
     private var mCurrent = 0f
     private val mMeasure = PathMeasure()
 
@@ -84,7 +87,7 @@ class WeatherView constructor(
 
     //每一格的偏移量
     private val mOffset by lazy{
-        width / 5f
+        width / 10f
     }
 
     //获得最高与最低和平均温度
@@ -92,6 +95,22 @@ class WeatherView constructor(
     private var mMinTemp = 0
     private var mAvgTemp = 0
 
+    //背景着色器
+    private val mBottomPaint = Paint()
+
+    //颜色
+    private var mStartColor = Color.parseColor("#1E90FF")
+    private var mEndColor = Color.TRANSPARENT
+
+    //着色器
+    private val mLinearGradient : LinearGradient by lazy {
+        LinearGradient(width / 2f, 0f, width / 2f, height.toFloat(), mStartColor, mEndColor, Shader.TileMode.MIRROR)
+    }
+
+    //下方文字偏移量
+    private val mOffsetBottomText = 15f
+
+    private var isShow = false
 
     init {
 
@@ -99,36 +118,48 @@ class WeatherView constructor(
             it.isAntiAlias = true
             it.strokeWidth = 6f
             it.style = Paint.Style.STROKE
-            it.color = Color.YELLOW
+            it.color = Color.parseColor("#1E90FF")
         }
         mHintPaint.also {
-            it.color = Color.BLUE
-            it.strokeWidth = 9f
+//            it.color = Color.LTGRAY
+            it.color = Color.parseColor("#B0C4DE")
+            it.strokeWidth = 30f
             it.style = Paint.Style.FILL
+            it.textAlign = Paint.Align.CENTER
+            it.textSize = 25f
         }
         mTextPaint.also {
-            it.strokeWidth = 10f
-            it.color = Color.GREEN
+            it.strokeWidth = 12f
+            it.color = Color.BLACK
             it.textSize = 25f
             it.style = Paint.Style.FILL
             it.textAlign = Paint.Align.CENTER
         }
         mPointPaint.also {
             it.strokeWidth = 15f
-            it.color = Color.BLACK
+            it.color = Color.parseColor("#6495ED")
             it.isAntiAlias = true
             it.style = Paint.Style.FILL_AND_STROKE
         }
+        mBottomPaint.also {
+            it.isAntiAlias = true
+            it.strokeWidth = 12f
+            it.style = Paint.Style.FILL
+        }
+
 
     }
 
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
-        drawBezier(canvas)
-//        drawTipView(canvas)
-//        drawText(canvas)
-        drawPointsAndText(canvas)
+        if(isShow){
+            drawBezier(canvas)
+    //        drawTipView(canvas)
+    //        drawText(canvas)
+            drawBottom(canvas)
+            drawPointsAndText(canvas)
+        }
     }
 
     //初始滑动距离
@@ -148,7 +179,7 @@ class WeatherView constructor(
                 initX = event.x
                 totalOffset += offset
 
-                if( -totalOffset < mTotalLength - width && totalOffset <= 0){
+                if( -totalOffset < mTotalLength + mOffset - width && totalOffset <= 0){
                     this.scrollX = -totalOffset.toInt()
                     moveDis -= offset *( mTotalLength + 2.3F * mOffset - width) / width
 
@@ -184,6 +215,15 @@ class WeatherView constructor(
         return super.onTouchEvent(event)
     }
 
+    private fun drawBottom(canvas: Canvas){
+        mBottomPaint.shader = mLinearGradient
+//        mMeasure.setPath(mPath,false)
+//        mMeasure.getSegment(0f,mMeasure.length,mBottomPath,false)
+        mBottomPath.lineTo(mTotalLength + mOffset,height.toFloat())
+        mBottomPath.lineTo(0f,height.toFloat())
+        canvas.drawPath(mBottomPath,mBottomPaint)
+    }
+
     private fun initMaxAndMin(){
         var sum = mTempPoints[0]
         mMaxTemp = mTempPoints[0]
@@ -212,12 +252,16 @@ class WeatherView constructor(
 //            canvas.drawCircle(total,verticalPoint,7.5f,mPointPaint)
 //        }
 
+
         for(i in 0 until mTempPoints.size - 1){
             total += mOffset
             val currentPoint = mTempPoints[i]
             val offsetPoint = (mAvgTemp - currentPoint ) * mPartSpare + height / 2
             canvas.drawCircle(total,offsetPoint,7.5f,mPointPaint)
             drawText(canvas,total,offsetPoint,i)
+            if(i % 2 == 0){
+                drawBottomText(canvas,total,mHourText[i])
+            }
         }
     }
 
@@ -228,7 +272,9 @@ class WeatherView constructor(
 
         mPath.reset()
 
-        mPath.moveTo(0f,height/2f)
+        val firstPoint = mTempPoints[0]
+        val firstOffsetPoint = (mAvgTemp - firstPoint ) * mPartSpare + height / 2
+        mPath.moveTo(0f,firstOffsetPoint)
 
         for(i in 0 until mTempPoints.size - 1){
             total += mOffset
@@ -237,6 +283,12 @@ class WeatherView constructor(
             mPath.lineTo(total,offsetPoint)
         }
 
+        total += mOffset
+        val endPoint = mTempPoints[mTempPoints.size - 1]
+        val endOffsetPoint = (mAvgTemp - endPoint ) * mPartSpare + height / 2
+        mPath.lineTo(total,endOffsetPoint)
+
+        mBottomPath = mPath
         canvas.drawPath(mPath,mPathPaint)
 
 //        mPath.moveTo(0f,height / 2f)
@@ -308,8 +360,22 @@ class WeatherView constructor(
 //    }
     private fun drawText(canvas: Canvas,x : Float,y : Float,index : Int){
 //        canvas.drawText(currentText,moveDis+tipWidth/2,2* (height/2 - offsetTop +tipHeight) /3,mTextPaint)
-        canvas.drawText(mTempPoints[index].toString(),x,y - 25,mTextPaint)
+        canvas.drawText("${mTempPoints[index]}°",x,y - 25,mTextPaint)
     }
 
+    private fun drawBottomText(canvas: Canvas,x : Float,text: String){
 
+        canvas.drawText(text,x,height-mOffsetBottomText,mHintPaint)
+    }
+    fun initHourText(mutableList: MutableList<String>){
+        mHourText = mutableList
+    }
+    fun initTempPoint(mutableList: MutableList<Int>){
+        mTempPoints = mutableList
+    }
+
+    fun show(){
+        isShow = true
+        invalidate()
+    }
 }

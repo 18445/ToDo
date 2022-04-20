@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="adapter_item" />
+    <item type="id" name="adapter" />
+    <item type="id" name="adapter_recyclerView" />
+    <item type="id" name="list_adapter_binding" />
+    <item type="id" name="last_delay_animation_position" />
+</resources>
