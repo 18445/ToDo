@@ -12,10 +12,13 @@ package com.example.todo.ui.adapter.core
  * @Description:     //TODO
  */
 
+
+
 inline fun listAdapter(block : ListAdapter.() -> Unit):ListAdapter = ListAdapter().apply{
     block()
 }
 
+//Xml的DSL加载
 inline fun <M> layoutViewModelDsl(
     layoutRes : Int,
     model : M,

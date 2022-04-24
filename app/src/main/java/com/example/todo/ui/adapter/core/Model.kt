@@ -9,7 +9,7 @@ package com.example.todo.ui.adapter.core
  * @CreateDate:     2022年04月20日 20:34:00
  * @UpdateRemark:   更新说明：
  * @Version:        1.0
- * @Description:    SameModel
+ * @Description:    SameModel 子 Model 用于差分判断
  */
 
 

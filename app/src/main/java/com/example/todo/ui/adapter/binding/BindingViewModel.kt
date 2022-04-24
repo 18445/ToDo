@@ -18,7 +18,7 @@ import com.example.todo.ui.adapter.core.DefaultViewModel
  * @CreateDate:     2022年04月20日 21:24:00
  * @UpdateRemark:   更新说明：
  * @Version:        1.0
- * @Description:     //TODO
+ * @Description:    BindingViewModel 用于DataBinding的绑定操作
  */
 
 open class BindingViewModel<M>(override val layoutRes: Int, private val variableId: Int) :

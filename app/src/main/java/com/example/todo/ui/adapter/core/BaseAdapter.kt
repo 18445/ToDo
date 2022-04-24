@@ -36,6 +36,7 @@ abstract class BaseAdapter<VM:ViewModelType>: RecyclerView.Adapter<RecyclerView.
         return defaultViewHolder
     }
 
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
     }
 
@@ -45,7 +46,7 @@ abstract class BaseAdapter<VM:ViewModelType>: RecyclerView.Adapter<RecyclerView.
         payloads: MutableList<Any>
     ) {
         if (position != RecyclerView.NO_POSITION) {
-            // Do your binding here
+            // Do my binding here
             holder.itemView.setTag(R.id.adapter, this)
             holder.itemView.setTag(R.id.adapter_recyclerView, recyclerView)
             getItem(position)?.apply {

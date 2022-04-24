@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
  * @CreateDate:     2022年04月19日 23:42:00
  * @UpdateRemark:   更新说明：
  * @Version:        1.0
- * @Description:     //TODO
+ * @Description:    ViewModel
  */
 
 typealias ViewModelType = ViewModel<*,*>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/weather_top_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/day_right_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <TextView
+            android:id="@+id/weather_day"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="今天"
+            android:textSize="21sp"
+            app:layout_constraintBottom_toTopOf="@+id/weather_top_barrier"
+            app:layout_constraintEnd_toStartOf="@+id/day_right_barrier"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/weather_grade"
+            android:layout_width="48dp"
+            android:layout_height="34dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="73"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/weather_top_barrier"
+            app:layout_constraintStart_toStartOf="@+id/day_right_barrier"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.375" />
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="5dp"
+            android:src="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/weather_top_barrier"
+            app:layout_constraintEnd_toEndOf="@+id/weather_grade"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/weather_grade"
+            app:layout_constraintTop_toBottomOf="@+id/weather_grade"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="125dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="28dp"
+            android:src="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/weather_top_barrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.589"
+            app:layout_constraintStart_toStartOf="@+id/day_right_barrier"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/weather_left"
+            android:layout_width="48dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="76dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="15°"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/weather_top_barrier"
+            app:layout_constraintEnd_toStartOf="@+id/imageView"
+            app:layout_constraintHorizontal_bias="0.352"
+            app:layout_constraintStart_toStartOf="@+id/day_right_barrier"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.423" />
+
+        <TextView
+            android:id="@+id/weather_right"
+            android:layout_width="48dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="21°"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/weather_top_barrier"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

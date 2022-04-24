@@ -18,10 +18,21 @@ import com.example.todo.ui.adapter.core.SameModel
  * Model
  * // 扩展DiffModel  兼容DiffUtil
  */
+
+/**
+ * Model 测试类
+ */
 data class ModelTest(var title: String, var subTitle: String) : SameModel {
     override fun <T : SameModel> getChangePayload(newItem: T): Any? {
         return null
     }
 
     override var uniqueId: String = title
+}
+
+data class WeatherHourlyModel(var tempList:List<Int>, var hourList:List<String>) : SameModel{
+    override var uniqueId: String = tempList.toString()
+    override fun <T : SameModel> getChangePayload(newItem: T): Any? {
+        return null
+    }
 }

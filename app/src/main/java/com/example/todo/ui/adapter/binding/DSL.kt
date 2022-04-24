@@ -11,7 +11,7 @@ import com.example.todo.ui.adapter.core.DefaultViewHolder
  * @CreateDate:     2022年04月20日 21:26:00
  * @UpdateRemark:   更新说明：
  * @Version:        1.0
- * @Description:     //TODO
+ * @Description:    bindingViewModelDsl
  */
 
 inline fun <M> bindingViewModelDsl(

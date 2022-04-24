@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.location.*
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +16,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
+import com.example.todo.BR
 import com.example.todo.R
 import com.example.todo.base.BaseApplication
 import com.example.todo.base.BaseFragment
 import com.example.todo.databinding.FragmentWeatherBinding
+import com.example.todo.ui.adapter.animators.firstAnimation
+import com.example.todo.ui.adapter.animators.updateAnimation
+import com.example.todo.ui.adapter.binding.BindingViewModel
+import com.example.todo.ui.adapter.binding.bindingViewModelDsl
+import com.example.todo.ui.adapter.binding.getBinding
+import com.example.todo.ui.adapter.core.*
+import com.example.todo.ui.viewModel.ModelTest
+import com.example.todo.ui.viewModel.WeatherHourlyModel
 import com.example.todo.ui.viewModel.WeatherViewModel
+import com.example.todo.ui.widget.WeatherView
 import com.example.todo.utils.dayToHourTime
 import com.example.todo.utils.getNoMoreThanTwoDigits
 
@@ -29,6 +41,7 @@ import com.qweather.sdk.bean.geo.GeoBean
 import com.qweather.sdk.bean.weather.WeatherHourlyBean
 import com.qweather.sdk.bean.weather.WeatherNowBean
 import com.qweather.sdk.view.QWeather
+import kotlinx.coroutines.delay
 
 
 /**
@@ -45,17 +58,18 @@ import com.qweather.sdk.view.QWeather
 class WeatherFragment :BaseFragment(){
     private lateinit var address:String
     private lateinit var weatherBinding: FragmentWeatherBinding
+    private val mWeatherListAdapter : ListAdapter by lazy {
+        ListAdapter()
+    }
 
     private val mHourList = mutableListOf<String>()
     private val mTempList = mutableListOf<Int>()
     private val locationManager : LocationManager by lazy {
         (BaseApplication.instance.getSystemService(LOCATION_SERVICE) as LocationManager)
     }
-
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireActivity())
     }
-
     private val weatherViewModel: WeatherViewModel by lazy {
         ViewModelProvider(this).get(WeatherViewModel::class.java)
     }
@@ -63,6 +77,50 @@ class WeatherFragment :BaseFragment(){
     @RequiresApi(Build.VERSION_CODES.N)
     override fun initData() {
         getPermission()
+
+        //用Handler进行测试
+        Handler(Looper.myLooper()!!).postDelayed({
+            mWeatherListAdapter.into(weatherBinding.weatherRecyclerview)
+            val weatherModel = WeatherHourlyModel(mTempList,mHourList)
+            mWeatherListAdapter.add(
+
+                //TODO 设置左方温度显示
+                //TODO 设置Event事件回调得到结果
+                bindingViewModelDsl(R.layout.item_weatherhourly,BR.model,weatherModel){
+
+
+                    ((itemView as ViewGroup).getChildAt(0) as WeatherView).apply {
+                            initTempPoint(weatherModel.tempList.toMutableList())
+                            initHourText(weatherModel.hourList.toMutableList())
+                            show()
+                        }
+//                    onBindViewHolder {
+//                        (view as ViewGroup).apply {
+//                            for(i in 0 until childCount){
+//                                Log.d("ViewGroupChildCount",getChildAt(i).toString())
+//                            }
+//                        }
+//                        ((view as ViewGroup).getChildAt(1) as WeatherView).apply {
+//                            val weatherModel = getModel<WeatherHourlyModel>()
+//                            weatherModel?.tempList?.toMutableList()?.let { it1 -> initTempPoint(it1) }
+//                            weatherModel?.hourList?.toMutableList()?.let { it1 -> initHourText(it1) }
+//                            show()
+//                        }
+//                    }
+
+                }
+            )
+//            mWeatherListAdapter.addAll(
+//                (0..6).map {
+//                    bindingViewModelDsl(R.layout.item_weekend_weather,BR.model,ModelTest("1","2")){
+//                        onViewAttachedToWindow {
+//                            firstAnimation()
+//                            updateAnimation()
+//                        }
+//                    }
+//                }
+//            )
+        },5000)
 
     }
 
@@ -76,6 +134,9 @@ class WeatherFragment :BaseFragment(){
         return weatherBinding.root
     }
 
+    /**
+     * 请求获得用户权限
+     */
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getPermission(){
         val locationPermissionRequest = registerForActivityResult(
@@ -121,6 +182,9 @@ class WeatherFragment :BaseFragment(){
 //        }
     }
 
+    /**
+     * 监听坐标信息
+     */
     private fun locationMonitor(provider: String) {
         if (ActivityCompat.checkSelfPermission(
                 requireActivity(),
@@ -157,6 +221,9 @@ class WeatherFragment :BaseFragment(){
         }
     }
 
+    /**
+     * 获得当前的位置信息
+     */
     @RequiresApi(Build.VERSION_CODES.N)
     private fun getLocationInfo() {
         //判断是否开启位置服务，没有则跳转至设置来开启
@@ -197,6 +264,7 @@ class WeatherFragment :BaseFragment(){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     initAddress(it)
                     if(this::address.isLateinit){
+                        //开启网络请求
                         getWeatherNow()
                         getCity()
                         getWeather24Hourly()
@@ -227,7 +295,6 @@ class WeatherFragment :BaseFragment(){
     }
 
     override fun initView(view: View) {
-
         weatherViewModel.also { weatherViewModel ->
             weatherViewModel.mWeatherNowBean.observe(this){
                 weatherBinding.weather = it.now
@@ -243,6 +310,9 @@ class WeatherFragment :BaseFragment(){
 
     }
 
+    /**
+     * 网络请求获得当前所在城市
+     */
     private fun getCity(){
         weatherViewModel.getCity(requireContext(),address,object : QWeather.OnResultGeoListener{
             override fun onError(p0: Throwable?) {
@@ -257,7 +327,9 @@ class WeatherFragment :BaseFragment(){
         })
     }
 
-
+    /**
+     * 网络请求获得当前的天气
+     */
     private fun getWeatherNow(){
         weatherViewModel.getWeatherNow(requireContext(),address,object :QWeather.OnResultWeatherNowListener{
             override fun onError(p0: Throwable?) {
@@ -271,6 +343,9 @@ class WeatherFragment :BaseFragment(){
         })
     }
 
+    /**
+     * 获得24小时的时间
+     */
     private fun getWeather24Hourly(){
         weatherViewModel.getWeather24Hourly(requireContext(),address,object :QWeather.OnResultWeatherHourlyListener{
             override fun onError(p0: Throwable?) {
@@ -292,6 +367,9 @@ class WeatherFragment :BaseFragment(){
         })
     }
 
+    /**
+     * 初始化位置信息 aa.bb,cc.dd
+     */
     @RequiresApi(Build.VERSION_CODES.N)
     private fun initAddress(location: Location){
         val longitude = location.longitude.getNoMoreThanTwoDigits()
@@ -299,11 +377,18 @@ class WeatherFragment :BaseFragment(){
         address = "${longitude},${latitude}"
     }
 
+    /**
+     * 将天气与时间信息添加给View显示
+     */
     private fun showHourWeather(){
-        weatherBinding.weatherView.initTempPoint(mTempList)
-        weatherBinding.weatherView.initHourText(mHourList)
-        weatherBinding.weatherView.show()
+//        weatherBinding.weatherView.initTempPoint(mTempList)
+//        weatherBinding.weatherView.initHourText(mHourList)
+//        weatherBinding.weatherView.show()
     }
+
+    /**
+     *
+     */
 }
 
 

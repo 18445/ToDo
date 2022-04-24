@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import java.util.*
 import kotlin.Comparator
 import kotlin.collections.ArrayList
+import kotlin.math.absoluteValue
 
 
 /**
@@ -167,17 +168,30 @@ class WeatherView constructor(
     private var totalOffset = 0f
     var offset = 0f
 
+    //滑动监听
+    private var initY = 0f
+    private var offsetY = 0f
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when(event.action){
             MotionEvent.ACTION_DOWN ->{
                 initX = event.x
+                initY = event.y
                 return true
             }
+
             MotionEvent.ACTION_MOVE ->{
+                offsetY = event.y - initY
                 offset =  event.x - initX
                 initX = event.x
                 totalOffset += offset
+
+//                if(offsetY.absoluteValue < 5 && offset.absoluteValue > 2){
+                if(offset.absoluteValue / offsetY.absoluteValue > 0.5 ){
+
+
+                    parent.requestDisallowInterceptTouchEvent(true)
+                }
 
                 if( -totalOffset < mTotalLength + mOffset - width && totalOffset <= 0){
                     this.scrollX = -totalOffset.toInt()
